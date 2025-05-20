@@ -11,27 +11,23 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    if (email === '' || password === '') {
+    if (email.trim() === '' || password.trim() === '') {
       setError('Please fill out all fields.');
       return;
     }
 
     try {
       setLoading(true);
-      // POST login request to backend
+
       await axios.post('http://localhost:8080/api/users/login', {
         email,
         password,
       });
 
-      // Login successful if no error thrown
       alert('Login successful!');
-      // Redirect user to home directly
-      window.location.href = '/home'; // or use react-router navigate if you use react-router
-
+      window.location.href = '/home';
     } catch (err) {
       console.error(err);
-
       if (err.response && err.response.status === 401) {
         setError('Invalid email or password.');
       } else {
@@ -43,77 +39,57 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-screen flex">
-      {/* Left side: Welcome and Registration */}
-      <div className="w-1/2 h-full bg-red-700 p-10 rounded-tl-3xl rounded-br-3xl flex flex-col justify-center items-center">
-        <h2 className="text-4xl font-bold text-white mb-4">Hello, Welcome!</h2>
-        <p className="font-bold text-black mb-6">Don't have an account?</p>
-        <button
-          className="px-6 py-3 bg-white text-red-700 rounded-lg hover:bg-gray-300 transition duration-200"
-          onClick={() => (window.location.href = '/register')} // redirect to registration page
-        >
-          Registration
-        </button>
-      </div>
+    <div className="w-full max-w-md mx-auto bg-white bg-opacity-90 rounded-xl shadow-lg p-8 backdrop-blur-md">
+      <h2 className="text-3xl font-bold text-red-700 text-center mb-6">Login</h2>
 
-      {/* Right side: Login Form */}
-      <div className="w-1/2 h-full bg-gray-800 p-10 rounded-tr-3xl rounded-bl-3xl flex flex-col justify-center items-center">
-        <h2 className="text-3xl font-bold text-white mb-8">Login</h2>
+      {error && <p className="text-sm text-red-600 text-center mb-4">{error}</p>}
 
-        {error && <p className="text-red-900 text-center mb-4">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Email */}
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none transition"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-sm">
-          {/* Email */}
-          <div className="w-full">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-              Email
-            </label>
-            <div className="flex items-center border-2 border-gray-300 rounded-lg">
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-4 text-sm border-0 focus:ring-2 focus:ring-red-600 focus:border-transparent rounded-lg"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-          </div>
+        {/* Password */}
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none transition"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
 
-          {/* Password */}
-          <div className="w-full">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
-            <div className="flex items-center border-2 border-gray-300 rounded-lg">
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-4 text-sm border-0 focus:ring-2 focus:ring-red-600 focus:border-transparent rounded-lg"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Login Button */}
-          <div className="w-full flex justify-center">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-red-600 text-white py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition duration-200"
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Login Button */}
+        <div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition duration-200 shadow-md"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
 
 export default Login;
-

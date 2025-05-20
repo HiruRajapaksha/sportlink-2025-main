@@ -80,7 +80,7 @@ const MessagingPanel = ({ isOpen, onClose }) => {
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed top-0 right-0 h-full w-96 bg-gray-700 text-white shadow-2xl z-50 flex flex-col"
+          className="fixed top-0 right-0 h-full w-96 bg-[#121212] text-white shadow-2xl z-50 flex flex-col"
           role="dialog"
           aria-modal="true"
           aria-labelledby="messaging-panel-title"
@@ -89,32 +89,32 @@ const MessagingPanel = ({ isOpen, onClose }) => {
             <>
               {/* Chat List Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-800">
-                <h2 className="text-2xl font-semibold">Messages</h2>
-                <button onClick={onClose} aria-label="Close chat panel" className="text-gray-400 hover:text-white">
+                <h2 className="text-2xl font-semibold tracking-wide font-sans">Messages</h2>
+                <button onClick={onClose} aria-label="Close chat panel" className="text-gray-500 hover:text-white transition-colors duration-200">
                   <FaTimes size={26} />
                 </button>
               </div>
               {/* Chat List */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-[#121212]">
                 {chats.map(chat => (
                   <div
                     key={chat.id}
-                    className="flex items-center space-x-4 cursor-pointer hover:bg-gray-800 p-2 rounded-lg"
+                    className="flex items-center space-x-4 cursor-pointer hover:bg-[#222] p-3 rounded-xl transition-colors duration-200"
                     onClick={() => setSelectedChatId(chat.id)}
                   >
                     <div className="relative">
-                      <img src={chat.avatar} alt={chat.user} className="w-12 h-12 rounded-full" />
+                      <img src={chat.avatar} alt={chat.user} className="w-12 h-12 rounded-full object-cover" />
                       {chat.status === "online" && (
-                        <span className="absolute bottom-0 right-0 h-3 w-3 bg-green-400 rounded-full border-2 border-gray-900" />
+                        <span className="absolute bottom-0 right-0 h-4 w-4 bg-green-500 rounded-full border-2 border-[#121212]" />
                       )}
                     </div>
-                    <div className="flex-1">
-                      <p className="font-semibold">{chat.user}</p>
-                      <p className="text-sm text-gray-400">
+                    <div className="flex-1 overflow-hidden">
+                      <p className="font-semibold truncate text-lg">{chat.user}</p>
+                      <p className="text-sm text-gray-400 truncate">
                         {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : "No messages yet"}
                       </p>
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 select-none">
                       {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].time : ""}
                     </span>
                   </div>
@@ -124,29 +124,33 @@ const MessagingPanel = ({ isOpen, onClose }) => {
           ) : (
             <>
               {/* Specific Chat Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-700">
-                <button onClick={() => setSelectedChatId(null)} aria-label="Back to chat list" className="text-gray-400 hover:text-white">
+              <div className="flex items-center justify-between p-6 border-b border-gray-900 bg-[#181818]">
+                <button
+                  onClick={() => setSelectedChatId(null)}
+                  aria-label="Back to chat list"
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                >
                   <FaArrowLeft size={24} />
                 </button>
                 <div className="flex items-center space-x-3">
                   <div className="relative">
-                    <img src={selectedChat.avatar} alt={selectedChat.user} className="w-10 h-10 rounded-full" />
+                    <img src={selectedChat.avatar} alt={selectedChat.user} className="w-10 h-10 rounded-full object-cover" />
                     {selectedChat.status === "online" && (
-                      <span className="absolute bottom-0 right-0 h-3 w-3 bg-green-400 rounded-full border-2 border-gray-900" />
+                      <span className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-[#181818]" />
                     )}
                   </div>
-                  <h2 className="text-xl font-semibold">{selectedChat.user}</h2>
+                  <h2 className="text-xl font-semibold font-sans tracking-wide">{selectedChat.user}</h2>
                 </div>
-                <button onClick={onClose} aria-label="Close chat panel" className="text-gray-400 hover:text-white">
+                <button onClick={onClose} aria-label="Close chat panel" className="text-gray-400 hover:text-white transition-colors duration-200">
                   <FaTimes size={26} />
                 </button>
               </div>
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-5">
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-[#121212]">
                 {selectedChat.messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex space-x-5 ${
+                    className={`flex items-end space-x-3 max-w-full ${
                       msg.user === "You" ? "justify-end" : "justify-start"
                     }`}
                   >
@@ -154,18 +158,18 @@ const MessagingPanel = ({ isOpen, onClose }) => {
                       <img
                         src={selectedChat.avatar}
                         alt={selectedChat.user}
-                        className="w-10 h-10 rounded-full object-cover"
+                        className="w-8 h-8 rounded-full object-cover shadow-md"
                       />
                     )}
                     <div
-                      className={`max-w-[70%] rounded-3xl p-4 shadow-lg ${
-                        msg.user === "You"
-                          ? "bg-blue-600 text-white rounded-br-none"
-                          : "bg-gray-700 text-white rounded-bl-none"
+                      className={`relative max-w-[70%] px-5 py-3 rounded-2xl shadow-lg text-sm break-words whitespace-pre-wrap
+                      ${msg.user === "You"
+                        ? "bg-gradient-to-tr from-purple-600 to-blue-500 text-white rounded-br-none"
+                        : "bg-[#2c2c2c] text-gray-300 rounded-bl-none"
                       }`}
                     >
-                      <p className="text-base whitespace-pre-wrap">{msg.text}</p>
-                      <span className="text-xs text-gray-400 mt-1 block text-right">
+                      <p>{msg.text}</p>
+                      <span className="absolute bottom-1 right-3 text-xs text-gray-400 select-none">
                         {msg.time}
                       </span>
                     </div>
@@ -173,7 +177,7 @@ const MessagingPanel = ({ isOpen, onClose }) => {
                       <img
                         src="https://randomuser.me/api/portraits/men/32.jpg"
                         alt="You"
-                        className="w-10 h-10 rounded-full object-cover"
+                        className="w-8 h-8 rounded-full object-cover shadow-md"
                       />
                     )}
                   </div>
@@ -181,23 +185,24 @@ const MessagingPanel = ({ isOpen, onClose }) => {
                 <div ref={messagesEndRef} />
               </div>
               {/* Input Area */}
-              <div className="p-6 border-t border-gray-700 flex items-center gap-4">
+              <div className="p-4 border-t border-gray-900 flex items-center gap-3 bg-[#181818]">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onEnterPress}
-                  placeholder="Type a message..."
-                  className="flex-1 resize-none bg-gray-700 rounded-3xl text-white p-4 placeholder-gray-400 focus:outline-none max-h-36"
+                  placeholder="Message..."
+                  className="flex-1 resize-none bg-[#222] rounded-3xl text-white p-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 max-h-32"
                   rows={1}
                 />
-                <Button
+                <button
                   onClick={handleSend}
-                  className="bg-blue-600 hover:bg-blue-700 rounded-full px-6 py-3 flex items-center gap-3 text-lg"
                   aria-label="Send message"
+                  disabled={!input.trim()}
+                  className={`p-3 rounded-full transition-colors duration-200 flex items-center justify-center
+                    ${input.trim() ? "bg-purple-600 hover:bg-purple-700" : "bg-purple-900 cursor-not-allowed"}`}
                 >
-                  <FaPaperPlane />
-                  Send
-                </Button>
+                  <FaPaperPlane size={18} />
+                </button>
               </div>
             </>
           )}
