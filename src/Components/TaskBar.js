@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // ✅ Added useNavigate
 import {
   FaHome,
   FaUser,
@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // ✅ Init
 
   const menuItems = [
     { name: 'Home', path: '/home', icon: <FaHome /> },
@@ -22,15 +23,20 @@ const Sidebar = () => {
 
   const bottomItems = [
     { name: 'Settings', path: '/settings', icon: <FaCog /> },
-    { name: 'Log Out', path: '/logout', icon: <FaSignOutAlt /> },
+    // 🚨 Removed path from logout so we can handle it manually
+    { name: 'Log Out', icon: <FaSignOutAlt />, action: 'logout' },
   ];
 
-  // Styles
+  const handleLogout = () => {
+    // Optional: clear session, tokens, etc.
+    localStorage.clear(); // ✅ Clear data if needed
+    navigate('/'); // ✅ Redirect to LandingPage
+  };
+
   const activeStyle = 'bg-[#FF1E56] text-black shadow-lg';
   const defaultStyle =
     'hover:bg-[#FF3A6B] hover:text-white hover:shadow-md transition-all duration-300';
 
-  // Enhanced SportLink animation
   const textVariants = {
     animate: {
       color: ['#FF1E56', '#E6003C', '#FF1E56'],
@@ -58,29 +64,24 @@ const Sidebar = () => {
         borderRight: '4px solid #FF1E56',
       }}
     >
-      {/* Top section (Animated Text + Main Menu) */}
       <div className="flex flex-col items-center pt-8">
-        {/* Animated 3D SportLink Text */}
         <motion.div
           className="text-4xl font-extrabold tracking-wide cursor-default select-none"
           variants={textVariants}
           animate="animate"
-          style={{
-            userSelect: 'none',
-            perspective: 600,
-          }}
+          style={{ userSelect: 'none', perspective: 600 }}
         >
           SportLink
         </motion.div>
 
-        {/* Main Navigation */}
         <nav className="mt-10 w-full space-y-4">
           {menuItems.map((item) => (
             <Link to={item.path} key={item.name}>
               <motion.div
                 whileHover={{ scale: 1.1 }}
-                className={`flex items-center justify-center lg:justify-start space-x-4 py-3 px-6 rounded-xl mx-4 cursor-pointer
-                  ${location.pathname === item.path ? activeStyle : defaultStyle}`}
+                className={`flex items-center justify-center lg:justify-start space-x-4 py-3 px-6 rounded-xl mx-4 cursor-pointer ${
+                  location.pathname === item.path ? activeStyle : defaultStyle
+                }`}
               >
                 <span className="text-2xl">{item.icon}</span>
                 <span className="hidden lg:block font-semibold tracking-wide">{item.name}</span>
@@ -90,21 +91,33 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      {/* Bottom Section (Settings, Logout) */}
       <div className="pb-8 w-full">
         <hr className="border-gray-700 my-6 mx-6" />
         <nav className="w-full space-y-4">
           {bottomItems.map((item) => (
-            <Link to={item.path} key={item.name}>
+            item.action === 'logout' ? (
               <motion.div
+                key={item.name}
                 whileHover={{ scale: 1.1 }}
-                className={`flex items-center justify-center lg:justify-start space-x-4 py-3 px-6 rounded-xl mx-4 cursor-pointer
-                  ${location.pathname === item.path ? activeStyle : defaultStyle}`}
+                className={`flex items-center justify-center lg:justify-start space-x-4 py-3 px-6 rounded-xl mx-4 cursor-pointer ${defaultStyle}`}
+                onClick={handleLogout} // ✅ logout logic
               >
                 <span className="text-2xl">{item.icon}</span>
                 <span className="hidden lg:block font-semibold tracking-wide">{item.name}</span>
               </motion.div>
-            </Link>
+            ) : (
+              <Link to={item.path} key={item.name}>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className={`flex items-center justify-center lg:justify-start space-x-4 py-3 px-6 rounded-xl mx-4 cursor-pointer ${
+                    location.pathname === item.path ? activeStyle : defaultStyle
+                  }`}
+                >
+                  <span className="text-2xl">{item.icon}</span>
+                  <span className="hidden lg:block font-semibold tracking-wide">{item.name}</span>
+                </motion.div>
+              </Link>
+            )
           ))}
         </nav>
       </div>
