@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './ui/Button';  // Importing the Button component
 import Input from './ui/Input';    // Importing the Input component
 import Sidebar from './TaskBar';   // Correct path to TaskBar
+
 const SettingsPage = () => {
   return (
     <div className="flex min-h-screen bg-gray-800 text-white">
@@ -9,7 +10,7 @@ const SettingsPage = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 ml-[180px] p-8">
+      <div className="flex-1 p-8 lg:ml-56">
         <h1 className="text-3xl font-bold mb-6">Settings</h1>
 
         <div className="space-y-8 bg-gray-800 rounded-3xl p-6">

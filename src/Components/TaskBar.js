@@ -10,8 +10,6 @@ import {
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-// ... imports unchanged
-
 const Sidebar = () => {
   const location = useLocation();
 
@@ -27,25 +25,26 @@ const Sidebar = () => {
     { name: 'Log Out', path: '/logout', icon: <FaSignOutAlt /> },
   ];
 
+  // Styles
   const activeStyle = 'bg-[#FF1E56] text-black shadow-lg';
   const defaultStyle =
     'hover:bg-[#FF3A6B] hover:text-white hover:shadow-md transition-all duration-300';
 
-  // 🚀 More vibrant animation
+  // Enhanced SportLink animation
   const textVariants = {
     animate: {
-      color: ['#FF1E56', '#FF3A6B', '#FFC107', '#00E5FF', '#FF1E56'],
+      color: ['#FF1E56', '#E6003C', '#FF1E56'],
       textShadow: [
-        '0 0 15px #FF3A6B, 0 0 25px #FFC107, 0 0 35px #00E5FF',
-        '0 0 20px #FF1E56, 0 0 30px #FF3A6B, 0 0 40px #FFC107',
-        '0 0 15px #FF3A6B, 0 0 25px #00E5FF, 0 0 35px #FF1E56',
+        '0 0 8px #FF1E56, 0 0 20px #FF3A6B, 0 0 30px #E6003C',
+        '0 0 12px #FF3A6B, 0 0 25px #FF1E56, 0 0 40px #E6003C',
+        '0 0 8px #FF1E56, 0 0 20px #FF3A6B, 0 0 30px #E6003C',
       ],
-      scale: [1, 1.1, 1],
-      rotateY: [0, 25, 0],
+      scale: [1, 1.05, 1],
+      rotateY: [0, 15, 0],
       transition: {
-        duration: 5,
+        duration: 4,
         repeat: Infinity,
-        repeatType: 'loop',
+        repeatType: 'reverse',
         ease: 'easeInOut',
       },
     },
@@ -59,8 +58,9 @@ const Sidebar = () => {
         borderRight: '4px solid #FF1E56',
       }}
     >
+      {/* Top section (Animated Text + Main Menu) */}
       <div className="flex flex-col items-center pt-8">
-        {/* 💡 More vibrant SportLink */}
+        {/* Animated 3D SportLink Text */}
         <motion.div
           className="text-4xl font-extrabold tracking-wide cursor-default select-none"
           variants={textVariants}
@@ -68,13 +68,12 @@ const Sidebar = () => {
           style={{
             userSelect: 'none',
             perspective: 600,
-            textAlign: 'center',
           }}
         >
           SportLink
         </motion.div>
 
-        {/* Navigation unchanged */}
+        {/* Main Navigation */}
         <nav className="mt-10 w-full space-y-4">
           {menuItems.map((item) => (
             <Link to={item.path} key={item.name}>
@@ -91,6 +90,7 @@ const Sidebar = () => {
         </nav>
       </div>
 
+      {/* Bottom Section (Settings, Logout) */}
       <div className="pb-8 w-full">
         <hr className="border-gray-700 my-6 mx-6" />
         <nav className="w-full space-y-4">
